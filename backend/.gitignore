@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Runtime uploads (keep uploads/ in repo via root rules if needed)
+uploads/*
+!uploads/.gitignore
+
+# Logs & OS
+*.log
+.DS_Store
