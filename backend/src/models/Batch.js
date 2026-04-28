@@ -10,6 +10,10 @@ const Batch = sequelize.define('Batch', {
   start_date: { type: DataTypes.DATEONLY, allowNull: true },
   end_date: { type: DataTypes.DATEONLY, allowNull: true },
   capacity: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 30 },
+  created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+  updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
+}, {
+  tableName: 'batches',
 });
 
 export default Batch;

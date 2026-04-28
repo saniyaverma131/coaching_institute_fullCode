@@ -8,7 +8,7 @@ const TimetableEntry = sequelize.define('TimetableEntry', {
   start_time: { type: DataTypes.TIME, allowNull: false },
   end_time: { type: DataTypes.TIME, allowNull: false },
   subject: { type: DataTypes.STRING(120), allowNull: false },
-  room: { type: DataTypes.STRING(80), allowNull: true },
+  room: { type: DataTypes.STRING(80), allowNull: true }
 });
 
 export default TimetableEntry;

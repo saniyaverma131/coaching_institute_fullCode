@@ -97,6 +97,7 @@ router.put('/courses/:id', async (req, res, next) => {
 router.post('/batches', async (req, res, next) => {
   try {
     const { course_id, teacher_id, name, schedule_text, start_date, end_date, capacity } = req.body;
+    
     if (!course_id || !name) return res.status(400).json({ error: 'course_id and name required' });
     const b = await Batch.create({
       course_id,
@@ -107,7 +108,7 @@ router.post('/batches', async (req, res, next) => {
       end_date: end_date || null,
       capacity: capacity ?? 30,
     });
-    if (teacher_id) await notifyUser(teacher_id, 'New batch assigned', `You are assigned to batch: ${name}`);
+    // if (teacher_id) await notifyUser(teacher_id, 'New batch assigned', `You are assigned to batch: ${name}`);
     res.status(201).json(b);
   } catch (e) {
     next(e);

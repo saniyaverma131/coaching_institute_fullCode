@@ -149,6 +149,7 @@ function AdminPanel() {
                   name: fd.get('name'),
                   schedule_text: fd.get('schedule_text'),
                   capacity: Number(fd.get('capacity')) || 30,
+                  
                 },
               })
               e.target.reset()
