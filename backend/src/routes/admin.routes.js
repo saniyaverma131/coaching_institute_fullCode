@@ -12,7 +12,7 @@ import {
 } from '../models/index.js';
 import { authenticate, loadUser, requireRole } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
-import { notifyUser } from '../utils/notify.js';
+// import { notifyUser } from '../utils/notify.js';
 
 const router = Router();
 
@@ -139,8 +139,8 @@ router.post('/enrollments', async (req, res, next) => {
     const { student_id, batch_id } = req.body;
     if (!student_id || !batch_id) return res.status(400).json({ error: 'student_id and batch_id required' });
     const e = await Enrollment.create({ student_id, batch_id });
-    const batch = await Batch.findByPk(batch_id, { include: [Course] });
-    await notifyUser(student_id, 'Enrolled in batch', batch ? `${batch.name} — ${batch.Course?.name || ''}` : 'New enrollment');
+    // const batch = await Batch.findByPk(batch_id, { include: [Course] });
+    // await notifyUser(student_id, 'Enrolled in batch', batch ? `${batch.name} — ${batch.Course?.name || ''}` : 'New enrollment');
     res.status(201).json(e);
   } catch (e) {
     if (e.name === 'SequelizeUniqueConstraintError') {
@@ -170,11 +170,11 @@ router.post('/timetable', async (req, res, next) => {
       subject,
       room: room || null,
     });
-    const enrollRows = await Enrollment.findAll({ where: { batch_id } });
-    const studentIds = enrollRows.map((en) => en.student_id);
-    for (const sid of studentIds) {
-      await notifyUser(sid, 'Timetable updated', `New slot: ${subject}`);
-    }
+    // const enrollRows = await Enrollment.findAll({ where: { batch_id } });
+    // const studentIds = enrollRows.map((en) => en.student_id);
+    // for (const sid of studentIds) {
+    //   await notifyUser(sid, 'Timetable updated', `New slot: ${subject}`);
+    // }
     res.status(201).json(row);
   } catch (e) {
     next(e);
@@ -204,7 +204,7 @@ router.post('/invoices', async (req, res, next) => {
       status: 'pending',
       due_date: due_date || null,
     });
-    await notifyUser(student_id, 'New fee invoice', `Amount ${amount} — please pay from your dashboard.`);
+    // await notifyUser(student_id, 'New fee invoice', `Amount ${amount} — please pay from your dashboard.`);
     res.status(201).json(inv);
   } catch (e) {
     next(e);
@@ -231,10 +231,10 @@ router.post('/notices', async (req, res, next) => {
     const { title, body } = req.body;
     if (!title || !body) return res.status(400).json({ error: 'title and body required' });
     const n = await Notice.create({ title, body, author_id: req.userId });
-    const students = await User.findAll({ where: { role: 'student' } });
-    for (const s of students) {
-      await notifyUser(s.id, `Notice: ${title}`, body.slice(0, 200));
-    }
+    // const students = await User.findAll({ where: { role: 'student' } });
+    // for (const s of students) {
+    //   await notifyUser(s.id, `Notice: ${title}`, body.slice(0, 200));
+    // }
     res.status(201).json(n);
   } catch (e) {
     next(e);
@@ -254,7 +254,7 @@ router.post('/certificates', upload.single('file'), async (req, res, next) => {
       file_path: req.file.filename,
       issued_by: req.userId,
     });
-    await notifyUser(Number(student_id), 'New certificate', title);
+    // await notifyUser(Number(student_id), 'New certificate', title);
     res.status(201).json(c);
   } catch (e) {
     next(e);

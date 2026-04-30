@@ -17,7 +17,7 @@ import {
 } from '../models/index.js';
 import { authenticate, loadUser, requireRole } from '../middleware/auth.js';
 import { makeReceiptNumber } from '../utils/receipt.js';
-import { notifyUser } from '../utils/notify.js';
+// import { notifyUser } from '../utils/notify.js';
 import { uploadsDir } from '../middleware/upload.js';
 
 const router = Router();
@@ -74,7 +74,7 @@ router.post('/pay', async (req, res, next) => {
     );
     await inv.update({ status: 'paid' }, { transaction: t });
     await t.commit();
-    await notifyUser(req.userId, 'Payment successful', `Receipt ${receipt_number}`);
+    // await notifyUser(req.userId, 'Payment successful', `Receipt ${receipt_number}`);
     res.status(201).json({ receipt_number, amount: inv.amount, invoice_id: inv.id });
   } catch (e) {
     await t.rollback();
