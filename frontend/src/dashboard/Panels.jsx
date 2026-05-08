@@ -24,25 +24,6 @@ function EmptyHint({ title = 'Nothing to show yet', hint }) {
   )
 }
 
-function Notifications({ items, onRead }) {
-  if (!items?.length) return <EmptyHint title="No notifications" hint="When admins or teachers post notices, they can appear here too." />
-  return (
-    <ul className="list">
-      {items.map((n) => (
-        <li key={n.id} className={n.is_read ? '' : 'unread'}>
-          <strong>{n.title}</strong>
-          {n.body && <div className="muted small">{n.body}</div>}
-          {!n.is_read && (
-            <button type="button" className="link" onClick={() => onRead(n.id)}>
-              Mark as read
-            </button>
-          )}
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 const ADMIN_FLOW = [
   { id: 'users', label: 'Add staff & students' },
   { id: 'courses', label: 'Create courses' },
@@ -53,7 +34,7 @@ const ADMIN_FLOW = [
   { id: 'certificates', label: 'Upload certificates when ready' },
 ]
 
-export function AdminPanel({ section, onNavigate, notifications, onRead }) {
+export function AdminPanel({ section, onNavigate }) {
   const toast = useToast()
   const [users, setUsers] = useState([])
   const [courses, setCourses] = useState([])
@@ -112,8 +93,6 @@ export function AdminPanel({ section, onNavigate, notifications, onRead }) {
                 </li>
               ))}
             </ol>
-            <h3 className="panel-subtitle">Notifications</h3>
-            <Notifications items={notifications} onRead={onRead} />
           </section>
         </div>
       )}
@@ -542,7 +521,7 @@ const TEACHER_FLOW = [
   { id: 'notices', label: 'Send a class notice' },
 ]
 
-export function TeacherPanel({ section, onNavigate, notifications, onRead }) {
+export function TeacherPanel({ section, onNavigate }) {
   const toast = useToast()
   const [batches, setBatches] = useState([])
   const [notes, setNotes] = useState([])
@@ -586,8 +565,6 @@ export function TeacherPanel({ section, onNavigate, notifications, onRead }) {
                 </li>
               ))}
             </ol>
-            <h3 className="panel-subtitle">Notifications</h3>
-            <Notifications items={notifications} onRead={onRead} />
           </section>
         </div>
       )}
@@ -866,7 +843,7 @@ const STUDENT_MAP = [
   { id: 'profile', label: 'Keep your profile up to date' },
 ]
 
-export function StudentPanel({ section, onNavigate, notifications, onRead }) {
+export function StudentPanel({ section, onNavigate }) {
   const toast = useToast()
   const { user, refreshUser } = useAuth()
   const [timetable, setTimetable] = useState([])
@@ -921,8 +898,6 @@ export function StudentPanel({ section, onNavigate, notifications, onRead }) {
                 </li>
               ))}
             </ul>
-            <h3 className="panel-subtitle">Notifications</h3>
-            <Notifications items={notifications} onRead={onRead} />
           </section>
         </div>
       )}

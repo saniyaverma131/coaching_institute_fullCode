@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
-import { api } from '../api'
 import { navForRole } from '../dashboard/navConfig'
 import { AdminPanel, TeacherPanel, StudentPanel } from '../dashboard/Panels'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()
   const nav = useNavigate()
-  const [notifications, setNotifications] = useState([])
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false)
   const [section, setSection] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -20,12 +18,6 @@ export default function Dashboard() {
   }, [user?.role])
 
   useEffect(() => {
-    api('/api/notifications')
-      .then(setNotifications)
-      .catch(() => {})
-  }, [user])
-
-  useEffect(() => {
     if (!logoutConfirmOpen) return
     function onKeyDown(e) {
       if (e.key === 'Escape') setLogoutConfirmOpen(false)
@@ -33,11 +25,6 @@ export default function Dashboard() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [logoutConfirmOpen])
-
-  async function markRead(id) {
-    await api(`/api/notifications/${id}/read`, { method: 'PATCH' })
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)))
-  }
 
   function goTo(id) {
     setSection(id)
@@ -121,28 +108,13 @@ export default function Dashboard() {
 
           <main className="app-content" id="dashboard-main">
             {user?.role === 'admin' && (
-              <AdminPanel
-                section={section}
-                onNavigate={goTo}
-                notifications={notifications}
-                onRead={markRead}
-              />
+              <AdminPanel section={section} onNavigate={goTo} />
             )}
             {user?.role === 'teacher' && (
-              <TeacherPanel
-                section={section}
-                onNavigate={goTo}
-                notifications={notifications}
-                onRead={markRead}
-              />
+              <TeacherPanel section={section} onNavigate={goTo} />
             )}
             {user?.role === 'student' && (
-              <StudentPanel
-                section={section}
-                onNavigate={goTo}
-                notifications={notifications}
-                onRead={markRead}
-              />
+              <StudentPanel section={section} onNavigate={goTo} />
             )}
           </main>
         </div>

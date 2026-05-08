@@ -1047,16 +1047,6 @@ button.link:hover {
   border-radius: var(--radius-sm, 10px);
 }
 
-.notifications-panel .list li {
-  border-radius: var(--radius-sm, 10px);
-  padding-left: 0.25rem;
-}
-
-.notifications-panel .list li.unread {
-  margin-left: 0;
-  margin-right: 0;
-}
-
 /* —— Logout confirmation modal —— */
 .modal-backdrop {
   position: fixed;

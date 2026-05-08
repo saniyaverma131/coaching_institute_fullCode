@@ -9,7 +9,6 @@ import Assignment from './Assignment.js';
 import Notice from './Notice.js';
 import Invoice from './Invoice.js';
 import Payment from './Payment.js';
-import Notification from './Notification.js';
 import Certificate from './Certificate.js';
 import Attendance from './Attendance.js';
 import Mark from './Mark.js';
@@ -48,9 +47,6 @@ Invoice.belongsTo(Course, { foreignKey: 'course_id' });
 Invoice.hasMany(Payment, { foreignKey: 'invoice_id' });
 Payment.belongsTo(Invoice, { foreignKey: 'invoice_id' });
 
-User.hasMany(Notification, { foreignKey: 'user_id' });
-Notification.belongsTo(User, { foreignKey: 'user_id' });
-
 User.hasMany(Certificate, { as: 'StudentCertificates', foreignKey: 'student_id' });
 Certificate.belongsTo(User, { as: 'Student', foreignKey: 'student_id' });
 User.hasMany(Certificate, { as: 'IssuedCertificates', foreignKey: 'issued_by' });
@@ -82,7 +78,6 @@ export {
   Notice,
   Invoice,
   Payment,
-  Notification,
   Certificate,
   Attendance,
   Mark,

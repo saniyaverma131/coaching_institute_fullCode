@@ -7,7 +7,6 @@ import {
   Enrollment,
   TimetableEntry,
   User,
-  Notification,
 } from '../models/index.js';
 import { authenticate, loadUser } from '../middleware/auth.js';
 
@@ -40,6 +39,7 @@ router.get('/notices', async (_req, res, next) => {
 router.get('/timetable', async (req, res, next) => {
   try {
     const { batch_id: batchId } = req.query;
+    console.log(req.userId, "userID")
     if (req.userRole === 'student') {
       const enrolls = await Enrollment.findAll({
         where: { student_id: req.userId },
@@ -108,30 +108,6 @@ router.get('/batches', async (req, res, next) => {
       include: [{ model: Batch, include }],
     });
     res.json(enrolls.map((e) => e.Batch).filter(Boolean));
-  } catch (e) {
-    next(e);
-  }
-});
-
-router.get('/notifications', async (req, res, next) => {
-  try {
-    const rows = await Notification.findAll({
-      where: { user_id: req.userId },
-      order: [['created_at', 'DESC']],
-      limit: 100,
-    });
-    res.json(rows);
-  } catch (e) {
-    next(e);
-  }
-});
-
-router.patch('/notifications/:id/read', async (req, res, next) => {
-  try {
-    const n = await Notification.findOne({ where: { id: req.params.id, user_id: req.userId } });
-    if (!n) return res.status(404).json({ error: 'Not found' });
-    await n.update({ is_read: true });
-    res.json(n);
   } catch (e) {
     next(e);
   }

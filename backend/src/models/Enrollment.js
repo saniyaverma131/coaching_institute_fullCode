@@ -8,7 +8,10 @@ const Enrollment = sequelize.define(
     student_id: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
     batch_id: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
   },
-  { tableName: 'enrollments' }
+  {
+    tableName: 'enrollments',
+    timestamps: false,
+  }
 );
 
 export default Enrollment;

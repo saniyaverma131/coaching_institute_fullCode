@@ -13,7 +13,6 @@ import {
 } from '../models/index.js';
 import { authenticate, loadUser, requireRole } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
-// import { notifyUser } from '../utils/notify.js';
 
 const router = Router();
 
@@ -48,13 +47,6 @@ router.post('/notes', upload.single('file'), async (req, res, next) => {
       file_name: req.file.originalname,
       file_path: req.file.filename,
     });
-    // const enrolls = await Enrollment.findAll({
-    //   include: [{ model: Batch, where: { course_id }, attributes: ['id'] }],
-    // });
-    // const studentIds = [...new Set(enrolls.map((e) => e.student_id))];
-    // for (const sid of studentIds) {
-    //   await notifyUser(sid, 'New study note', title);
-    // }
     res.status(201).json(n);
   } catch (e) {
     next(e);
@@ -92,7 +84,6 @@ router.post('/attendance', async (req, res, next) => {
     if (!created) {
       await row.update({ status: status || row.status, recorded_by: req.userId });
     }
-    // await notifyUser(student_id, 'Attendance recorded', `${class_date}: ${row.status}`);
     res.status(created ? 201 : 200).json(row);
   } catch (e) {
     next(e);
@@ -132,7 +123,6 @@ router.post('/marks', async (req, res, next) => {
       max_score: max_score ?? 100,
       recorded_by: req.userId,
     });
-    // await notifyUser(student_id, 'Marks updated', `${exam_title}: ${score}`);
     res.status(201).json(m);
   } catch (e) {
     next(e);
@@ -169,13 +159,6 @@ router.post('/assignments', async (req, res, next) => {
       description: description || null,
       due_date: due_date || null,
     });
-    // const batches = await Batch.findAll({ where: { course_id } });
-    // const batchIds = batches.map((b) => b.id);
-    // const enrolls = await Enrollment.findAll({ where: { batch_id: { [Op.in]: batchIds } } });
-    // const sids = [...new Set(enrolls.map((e) => e.student_id))];
-    // for (const sid of sids) {
-    //   await notifyUser(sid, 'New assignment', title);
-    // }
     res.status(201).json(a);
   } catch (e) {
     next(e);
@@ -203,10 +186,6 @@ router.post('/notices', async (req, res, next) => {
     const { title, body } = req.body;
     if (!title || !body) return res.status(400).json({ error: 'title and body required' });
     const n = await Notice.create({ title, body, author_id: req.userId });
-    // const students = await User.findAll({ where: { role: 'student' } });
-    // for (const s of students) {
-    //   await notifyUser(s.id, `Notice: ${title}`, body.slice(0, 200));
-    // }
     res.status(201).json(n);
   } catch (e) {
     next(e);
